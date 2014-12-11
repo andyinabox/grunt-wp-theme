@@ -46,11 +46,12 @@ exports.template = function( grunt, init, done ) {
 		props.devDependencies = {
 			'grunt': '~0.4.1',
 			'bower': '~1.3.12',
-			'browerify': '~'
+			"browserify": "~7.0.0",
+			"browserify-shim": "~3.8.1",
 			'matchdep': '~0.1.2',
 			'grunt-browserify': '~3.2.1',
 			'grunt-sync-pkg': '~0.1.2',
-			'grunt-contrib-concat': '~0.1.2',
+			"grunt-contrib-uglify": "~0.1.1",
 			'grunt-contrib-cssmin': '~0.6.0',
 			'grunt-contrib-jshint': '~0.1.1',
 			'grunt-contrib-nodeunit': '~0.1.2',
@@ -68,6 +69,13 @@ exports.template = function( grunt, init, done ) {
 		// An additional value that won't conflict with NodeUnit unit tests.
 		props.js_test_safe_name = props.js_safe_name === 'test' ? 'myTest' : props.js_safe_name;
 		props.js_safe_name_caps = props.js_safe_name.toUpperCase();
+
+		props.browserify = {
+		    "transform": [
+		      "browserify-shim"
+		    ]
+		},
+		props["browserify-shim"]: "./assets/js/src/browserify-shim.js"
 
 		// Files to copy and process
 		var files = init.filesToCopy( props );

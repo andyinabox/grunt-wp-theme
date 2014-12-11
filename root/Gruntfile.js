@@ -7,22 +7,6 @@ module.exports = function( grunt ) {
 	// Project configuration
 	grunt.initConfig( {
 		pkg:    grunt.file.readJSON( 'package.json' ),
-		concat: {
-			options: {
-				stripBanners: true,
-				banner: '/*! <%= pkg.title %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
-					' * <%= pkg.homepage %>\n' +
-					' * Copyright (c) <%= grunt.template.today("yyyy") %>;' +
-					' * Licensed GPLv2+' +
-					' */\n'
-			},
-			{%= js_safe_name %}: {
-				src: [
-					'assets/js/src/{%= js_safe_name %}.js'
-				],
-				dest: 'assets/js/{%= js_safe_name %}.js'
-			}
-		},
 		jshint: {
 			browser: {
 				all: [
@@ -43,25 +27,32 @@ module.exports = function( grunt ) {
 			}   
 		},
 		browserify: {
-			// any settings?
-		}
-		// uglify: {
-		// 	all: {
-		// 		files: {
-		// 			'assets/js/{%= js_safe_name %}.min.js': ['assets/js/{%= js_safe_name %}.js']
-		// 		},
-		// 		options: {
-		// 			banner: '/*! <%= pkg.title %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
-		// 				' * <%= pkg.homepage %>\n' +
-		// 				' * Copyright (c) <%= grunt.template.today("yyyy") %>;' +
-		// 				' * Licensed GPLv2+' +
-		// 				' */\n',
-		// 			mangle: {
-		// 				except: ['jQuery']
-		// 			}
-		// 		}
-		// 	}
-		// },
+		  all: {
+		    files: {
+		      'assets/js/{%= js_safe_name %}.js': ['assets/js/src/**/*.js'],
+		    },
+		    options: {
+		      transform: ['browserify-shim']
+		    }
+		  }			
+		},
+		uglify: {
+			all: {
+				files: {
+					'assets/js/{%= js_safe_name %}.min.js': ['assets/js/{%= js_safe_name %}.js']
+				},
+				options: {
+					banner: '/*! <%= pkg.title %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
+						' * <%= pkg.homepage %>\n' +
+						' * Copyright (c) <%= grunt.template.today("yyyy") %>;' +
+						' * Licensed GPLv2+' +
+						' */\n',
+					mangle: {
+						except: ['jQuery']
+					}
+				}
+			}
+		},
 		test:   {
 			files: ['assets/js/test/**/*.js']
 		},
@@ -131,7 +122,15 @@ module.exports = function( grunt ) {
 			{% } %}
 			scripts: {
 				files: ['assets/js/src/**/*.js', 'assets/js/vendor/**/*.js'],
-				tasks: ['jshint', 'concat', 'uglify'],
+				tasks: ['jshint', 'browserify', 'uglify'],
+				options: {
+					debounceDelay: 500
+				}
+			},
+
+			bowerjson: {
+				files: ['package.json'],
+				tasks: ['sync'],
 				options: {
 					debounceDelay: 500
 				}
@@ -141,11 +140,11 @@ module.exports = function( grunt ) {
 
 	// Default task.
 	{% if ('sass' === css_type) { %}
-	grunt.registerTask( 'default', ['jshint', 'concat', 'uglify', 'sass', 'cssmin'] );
+	grunt.registerTask( 'default', ['jshint', 'browserify', 'uglify', 'sass', 'cssmin'] );
 	{% } else if ('less' === css_type) { %}
-	grunt.registerTask( 'default', ['jshint', 'concat', 'uglify', 'less', 'cssmin'] );
+	grunt.registerTask( 'default', ['jshint', 'browserify', 'uglify', 'less', 'cssmin'] );
 	{% } else { %}
-	grunt.registerTask( 'default', ['jshint', 'concat', 'uglify', 'cssmin'] );
+	grunt.registerTask( 'default', ['jshint', 'browserify', 'uglify', 'cssmin'] );
 	{% } %}
 
 	grunt.util.linefeed = '\n';
