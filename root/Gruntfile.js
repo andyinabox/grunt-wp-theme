@@ -42,23 +42,26 @@ module.exports = function( grunt ) {
 				}
 			}   
 		},
-		uglify: {
-			all: {
-				files: {
-					'assets/js/{%= js_safe_name %}.min.js': ['assets/js/{%= js_safe_name %}.js']
-				},
-				options: {
-					banner: '/*! <%= pkg.title %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
-						' * <%= pkg.homepage %>\n' +
-						' * Copyright (c) <%= grunt.template.today("yyyy") %>;' +
-						' * Licensed GPLv2+' +
-						' */\n',
-					mangle: {
-						except: ['jQuery']
-					}
-				}
-			}
-		},
+		browserify: {
+			// any settings?
+		}
+		// uglify: {
+		// 	all: {
+		// 		files: {
+		// 			'assets/js/{%= js_safe_name %}.min.js': ['assets/js/{%= js_safe_name %}.js']
+		// 		},
+		// 		options: {
+		// 			banner: '/*! <%= pkg.title %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
+		// 				' * <%= pkg.homepage %>\n' +
+		// 				' * Copyright (c) <%= grunt.template.today("yyyy") %>;' +
+		// 				' * Licensed GPLv2+' +
+		// 				' */\n',
+		// 			mangle: {
+		// 				except: ['jQuery']
+		// 			}
+		// 		}
+		// 	}
+		// },
 		test:   {
 			files: ['assets/js/test/**/*.js']
 		},

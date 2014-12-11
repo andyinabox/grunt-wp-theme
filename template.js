@@ -45,9 +45,12 @@ exports.template = function( grunt, init, done ) {
 		props.version = '0.1.0';
 		props.devDependencies = {
 			'grunt': '~0.4.1',
+			'bower': '~1.3.12',
+			'browerify': '~'
 			'matchdep': '~0.1.2',
+			'grunt-browserify': '~3.2.1',
+			'grunt-sync-pkg': '~0.1.2',
 			'grunt-contrib-concat': '~0.1.2',
-			'grunt-contrib-uglify': '~0.1.1',
 			'grunt-contrib-cssmin': '~0.6.0',
 			'grunt-contrib-jshint': '~0.1.1',
 			'grunt-contrib-nodeunit': '~0.1.2',
