@@ -38,30 +38,17 @@ exports.template = function( grunt, init, done ) {
 		{
 			name: 'css_type',
 			message: 'CSS Preprocessor: Will you use "Sass", "LESS", or "none" for CSS with this project?',
-			default: 'Sass'
+			default: 'LESS'
 		}
 	], function( err, props ) {
-		props.keywords = [];
-		props.version = '0.1.0';
-		props.devDependencies = {
-			'grunt': '~0.4.1',
-			'bower': '~1.3.12',
-			"browserify": "~7.0.0",
-			"browserify-shim": "~3.8.1",
-			'matchdep': '~0.1.2',
-			'grunt-browserify': '~3.2.1',
-			'grunt-sync-pkg': '~0.1.2',
-			"grunt-contrib-uglify": "~0.1.1",
-			'grunt-contrib-cssmin': '~0.6.0',
-			'grunt-contrib-jshint': '~0.1.1',
-			'grunt-contrib-nodeunit': '~0.1.2',
-			'grunt-contrib-watch': '~0.2.0',
-		};
 
+		props.keywords = [];
+		props.version = '0.0.1';
 		// Sanitize names where we need to for PHP/JS
 		props.name = props.title.replace( /\s+/g, '-' ).toLowerCase();
 		// Development prefix (i.e. to prefix PHP function names, variables)
 		props.prefix = props.prefix.replace('/[^a-z_]/i', '').toLowerCase();
+
 		// Development prefix in all caps (e.g. for constants)
 		props.prefix_caps = props.prefix.toUpperCase();
 		// An additional value, safe to use as a JavaScript identifier.
@@ -70,12 +57,22 @@ exports.template = function( grunt, init, done ) {
 		props.js_test_safe_name = props.js_safe_name === 'test' ? 'myTest' : props.js_safe_name;
 		props.js_safe_name_caps = props.js_safe_name.toUpperCase();
 
-		props.browserify = {
-		    "transform": [
-		      "browserify-shim"
-		    ]
-		},
-		props["browserify-shim"]: "./assets/js/src/browserify-shim.js"
+		props.devDependencies = {
+			'grunt': '~0.4.1',
+			'bower': '~1.3.12',
+			"time-grunt": "~1.0.0",
+			'matchdep': '~0.1.2',
+			"grunt-bower-requirejs": "~1.1.1",
+			"grunt-contrib-requirejs": "~0.4.4",
+			"grunt-contrib-uglify": "~0.1.1",
+			'grunt-contrib-cssmin': '~0.6.0',
+			'grunt-contrib-jshint': '~0.1.1',
+			'grunt-contrib-nodeunit': '~0.1.2',
+			'grunt-contrib-watch': '~0.2.0',
+			// "grunt-iconizr": "~0.2.2",
+			"grunt-release-it": "~0.2.0"
+		};
+
 
 		// Files to copy and process
 		var files = init.filesToCopy( props );
@@ -112,6 +109,13 @@ exports.template = function( grunt, init, done ) {
 
 		// Generate package.json file
 		init.writePackageJSON( 'package.json', props );
+
+		// Generate bower.json file
+		init.writePackageJSON( 'bower.json', {
+			name: props.name
+			, version: props.version
+			, main: [ 'assets/js/'+props.js_safe_name+'.js' ]
+		});
 
 		// Done!
 		done();
